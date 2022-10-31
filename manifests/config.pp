@@ -12,48 +12,42 @@
 #   ident any configuration added in this iteration of the
 #   recursion. Defauls to 0 
 # @param values
-#   The hash it expects needs name which corresponds to the $filename saved in $config_path/$local_configdir/
-#   For instance the following hash will produce a file in /etc/dovecot/conf.d/master.conf if $config_path
-#   and $local_configdir are set to default.
-#   **NOTE - the file named will be completely overwritten, so ensure that ALL needed values are specified.**
-#
-#
+#   The hash it expects needs name which corresponds to the `$filename saved in $config_path/$local_configdir/`
+#   For instance the following hash will produce a file in `/etc/dovecot/conf.d/master.conf` if `$config_path`
+#   and `$local_configdir` are set to default (hiera, yaml syntax):
 #   ```
 #   dovecot::config:
-#     'master.conf':                     # <- name ($filename)
+#     master.conf:                     # <- name ($filename)
 #       values:
 #         default_process_limit: 350
 #         default_vsz_limit: 1024M
 #         default_client_limit: 2000
 #   ```
-#
+#   **NOTE - the file named will be completely overwritten, so ensure that ALL needed values are specified.**<br/>
 #   The resulting **/etc/dovecot/conf.d/master.conf** will look like this:
-#
 #   ```
 #   This file is managed by Puppet. DO NOT EDIT.
 #   default_client_limit = 2000
 #   default_process_limit = 350
 #   default_vsz_limit = 1024M
 #   ```
-#   
-#   Defaults to {}
 # @param sections
 #   Sometimes you need to have [Sections](https://doc.dovecot.org/configuration_manual/config_file/#sections) 
 #   in your config files.  
 #   These are defined as an Array of hashes similar to the intial config hash:  
 #   Expanding on our previous example, wanting to add a section we can add a 'sections' key to our hash.  
-#
+#   Example (hiera, yaml syntax):
 #   ```
 #   dovecot::config:
 #     mail.conf:
 #       values:
-#         'mail_location': 'maildir:~/'
+#         mail_location: 'maildir:~/'
 #       sections:
 #         - name: 'namespace inbox'
 #           values:
-#             'inbox': 'yes'
-#             'seperator': '.'
-#             'prefix': 'INBOX'
+#             inbox: 'yes'
+#             seperator: '.'
+#             prefix: 'INBOX'
 #   ``` 
 #
 #   This will result in **/etc/dovecot/conf.d/mail.conf** containing the following:
@@ -68,10 +62,8 @@
 #   }
 #   ``` 
 #
-#   Some dovecot sections have a double bracket system (section within a section). This is done as follows:
-#
-#   Example (hiera):
-#
+#   Some dovecot sections have a double bracket system (section within a section). 
+#   This is done as follows (hiera, yaml syntax):
 #   ```
 #   dovecot::config:
 #     master.conf:
@@ -84,28 +76,26 @@
 #           sections:
 #             - name: 'inet_listener imap'
 #               values:
-#                 'port': '143'
+#                 port: '143'
 #             - name: inet_listener imaps
 #               values:
-#                 'port': '993'
-#                 'ssl': 'yes'
+#                 port: '993'
+#                 ssl: 'yes'
 #             - name: 'inet_listener pop3'
 #               values:
-#                 'port': '110'
+#                 port: '110'
 #             - name: inet_listener pop3s
 #               values:
-#                 'port': '995'
-#                 'ssl': 'yes'
+#                 port: '995'
+#                 ssl: 'yes'
 #   ```
 #   This will produce the file **/etc/dovecot/conf.d/master.conf** with content below:
-#
 #   ```
 #   This file is managed by Puppet. DO NOT EDIT.
 #   default_client_limit = 2100
 #   default_process_limit = 350
 #   default_vsz_limit = 1024M
 #   service imap-login {
-#
 #     inet_listener imap {
 #       port = 143
 #     }
@@ -115,7 +105,6 @@
 #     }
 #   }
 #   service pop3-login {
-#
 #     inet_listener pop3 {
 #       port = 110
 #     }
@@ -125,8 +114,6 @@
 #     }
 #   }
 #   ```
-#
-#   Defaults to []
 # 
 define dovecot::config (
   String  $file      = $title,
